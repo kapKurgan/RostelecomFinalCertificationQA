@@ -6,10 +6,18 @@ from generators.data_generator import UserDataGenerator
 class TestUserAPI:
     """Тестовый класс для API управления пользователями"""
 
+    @pytest.fixture(autouse=True)
     def setup(self):
         """Настройка тестов"""
         self.base = BaseTest()
         self.generator = UserDataGenerator()
+        self.created_users = []
+        yield
+        for username in self.created_users:
+            try:
+                self.base.delete_user(username)
+            except:
+                pass
 
     def test_create_user_success(self):
         """Тест успешного создания пользователя"""
