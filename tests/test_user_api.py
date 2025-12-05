@@ -1,7 +1,7 @@
 import pytest
 from ..base.base_test import BaseTest
 from ..generators.data_generator import UserDataGenerator
-
+import time
 
 class TestUserAPI:
     """Тестовый класс для API управления пользователями"""
@@ -37,3 +37,16 @@ class TestUserAPI:
         user_data = self.generator.generate_invalid_user_data("empty_fields")
         response = self.base.create_user(user_data)
         assert response.status_code == 200
+
+    def test_login_success(self):
+        """Тест успешного входа пользователя"""
+        username = f"login_user_{int(time.time())}"
+        password = "testpass123"
+
+        user_data = self.generator.generate_single_user(username)
+        user_data["password"] = password
+        self.base.create_user(user_data)
+
+        response = self.base.login(username, password)
+        assert response.status_code == 200
+        self.created_users.append(username)
