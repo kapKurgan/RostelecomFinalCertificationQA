@@ -24,3 +24,9 @@ class TestUserAPI:
         user_data = self.generator.generate_single_user()
         response = self.base.create_user(user_data)
         assert response.status_code == 200
+
+    def test_create_user_with_empty_data(self):
+        """Тест создания пользователя с пустыми данными"""
+        user_data = self.generator.generate_invalid_user_data("empty_fields")
+        response = self.base.create_user(user_data)
+        assert response.status_code == 200
