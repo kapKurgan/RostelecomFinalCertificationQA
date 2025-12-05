@@ -91,3 +91,12 @@ class TestUserAPI:
         user_data = self.generator.generate_single_user(fake_username)
         response = self.base.update_user(fake_username, user_data)
         assert response.status_code == 200
+
+    def test_delete_user_success(self):
+        """Тест успешного удаления пользователя"""
+        username = f"delete_user_{int(time.time())}"
+        user_data = self.generator.generate_single_user(username)
+        self.base.create_user(user_data)
+
+        response = self.base.delete_user(username)
+        assert response.status_code == 200
