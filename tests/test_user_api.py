@@ -84,3 +84,10 @@ class TestUserAPI:
         response = self.base.update_user(username, updated_data)
         assert response.status_code == 200
         self.created_users.append(username)
+
+    def test_update_nonexistent_user(self):
+        """Тест обновления несуществующего пользователя"""
+        fake_username = f"nonexistent_{int(time.time())}"
+        user_data = self.generator.generate_single_user(fake_username)
+        response = self.base.update_user(fake_username, user_data)
+        assert response.status_code == 200
