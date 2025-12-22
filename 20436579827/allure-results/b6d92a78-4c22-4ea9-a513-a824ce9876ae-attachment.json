@@ -1,0 +1,13 @@
+URL: https://petstore.swagger.io/v2/user/nonexistent_1766417921
+Method: PUT
+Data: {
+  "id": 72157,
+  "username": "nonexistent_1766417921",
+  "firstName": "Luke",
+  "lastName": "Soto",
+  "email": "greenedesiree@example.net",
+  "password": "YTZL7^bt&6",
+  "phone": "(431)230-2783x268",
+  "userStatus": 2
+}
+Params: None
