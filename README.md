@@ -155,23 +155,28 @@ Workflow автоматически:
 - Генерирует HTML-отчеты
 - Публикует отчеты в GitHub Pages
 
-## URL отчетов GitHub Pages:
+# URL отчетов GitHub Pages:
 
-HTML
+## HTML
+
 ```bash
 https://kapKurgan.github.io/framework-for-testing-functionality-user-management-API/<run_id>/pytest-report.html
 ```
 
-Например
+
+Например:
 ```bash
-https://kapKurgan.github.io/framework-for-testing-functionality-user-management-API/20433160653/pytest-report.html
+https://kapKurgan.github.io/framework-for-testing-functionality-user-management-API/20433392081/pytest-report.html
 ```
 
-ALLURE 
+## ALLURE 
+
 ```bash
 https://kapKurgan.github.io/framework-for-testing-functionality-user-management-API/<run_id>/allure-report/index.html
 ```
 
+
+Например:
 ```bash
-https://kapKurgan.github.io/framework-for-testing-functionality-user-management-API/20433160653/allure-report/index.html
+https://kapKurgan.github.io/framework-for-testing-functionality-user-management-API/20433392081/allure-report/index.html
 ```
