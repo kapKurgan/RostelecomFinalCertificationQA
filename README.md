@@ -135,7 +135,7 @@ allure serve reports/allure-results
 - Перейдите в Actions > API Tests > Run workflow
 - Выберите сценарий тестов (например, -m login)
 - Нажмите Run workflow
-- Система выполнит тесты напрямую к https://petstore.swagger.io/v2
+- Система выполнит тесты напрямую к https://petstore.swagger.io
 
 ## URL отчетов GitHub Pages:
 
@@ -145,9 +145,8 @@ https://kapKurgan.github.io/framework-for-testing-functionality-user-management-
 ```
 
 Например:
-```bash
 https://kapKurgan.github.io/framework-for-testing-functionality-user-management-API/20433392081/pytest-report.html
-```
+
 
 ### ALLURE 
 ```bash
@@ -155,9 +154,8 @@ https://kapKurgan.github.io/framework-for-testing-functionality-user-management-
 ```
 
 Например:
-```bash
 https://kapKurgan.github.io/framework-for-testing-functionality-user-management-API/20433392081/allure-report/index.html
-```
+
 
 ## Требования
 - Python 3.12+
