@@ -1,40 +1,63 @@
-version: '3.9'
+# docker-compose.ci.yaml
+# Docker Compose v2 — поле version не нужно
 
-x-base-service: &base-service
-  image: base-service
-  volumes:
-    - .:/app
-  working_dir: /app
-#  environment:
-#    ENV_FILE: .env.ci
+services:
+  # ============================================
+  # Сервис с тестами (pytest)
+  # ============================================
+  pytest:
+    # Имя образа для локальной сборки
+    image: api-tests:latest
+    # Контекст сборки
+    build:
+      context: ./testing-API  # Путь к Dockerfile.pytest
+      dockerfile: Dockerfile.pytest
+    # Зависимости: ждем готовности мока
+    depends_on:
+      http-mock:
+        condition: service_healthy
+    # Монтируем каталог для отчетов
+    volumes:
+      - ./reports:/app/reports
+    # Переменные окружения
+    environment:
+      - API_BASE_URL=http://http-mock:8081
+      - PYTEST_MARKERS=login
+    # Команда запуска pytest
+    command: >
+      sh -c "pytest -m $${PYTEST_MARKERS} --html=reports/pytest_report.html -v"
+    # Подключаем к тестовой сети
+    networks:
+      - test-network
 
-x-python-service: &python-service
-  <<: *base-service
-  entrypoint: [ "python", "-u", "-m" ]
+  # ============================================
+  # HTTP Mock — эмулирует реальное API
+  # ============================================
+  http-mock:
+    # Наследуем от base-service, который собрали ранее
+    image: http-mock:latest
+    build:
+      context: ./testing-API
+      dockerfile: Dockerfile.http-mock
+    # Порты доступны только внутри сети
+    expose:
+      - "8081"
+    environment:
+      - MOCK_DELAY_MS=50
+      - MOCK_FAILURE_RATE=0.00
+    # Проверка здоровья — критично для depends_on
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8081/health"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+      start_period: 5s
+    networks:
+      - test-network
 
-#services:
-#  # mock-service
-#  http-mock:
-#    <<: *python-service
-#    ports: [ "8008:8008" ]
-#    command: "services.mock.server.http"
-#    container_name: "http-mock"
-#
-#  grpc-mock:
-#    <<: *python-service
-#    ports: [ "9008:9008" ]
-#    command: "services.mock.server.grpc"
-#    container_name: "grpc-mock"
-#
-#  # gateway-services
-#  http-gateway:
-#    <<: *python-service
-#    ports: [ "8003:8003" ]
-#    command: "services.gateway.server.http"
-#    container_name: "http-gateway"
-#
-#  grpc-gateway:
-#    <<: *python-service
-#    ports: [ "9003:9003" ]
-#    command: "services.gateway.server.grpc"
-#    container_name: "grpc-gateway"
+# ============================================
+# Изолированная сеть для тестов
+# ============================================
+networks:
+  test-network:
+    driver: bridge

@@ -10,7 +10,7 @@ on:
           - -m login
           - -m regression
         required: true
-        description: 'Locust config file'
+        description: 'Pytest markers'
 
 jobs:
   run-tests:
@@ -29,8 +29,11 @@ jobs:
       - name: Clone test services
         run: git clone https://github.com/kapKurgan/framework-for-testing-functionality-user-management-API.git testing-API
 
-      - name: Check compose file exists
-        run: ls -la testing-API/docker-compose*
+      # Копируем нужные файлы в testing-API
+      - name: Copy config files to testing-API
+        run: |
+          cp Dockerfile.base testing-API/
+          cp docker-compose.ci.yaml testing-API/
 
       - name: Build base Docker image
         run: docker build -f Dockerfile.base -t base-service .
@@ -45,11 +48,10 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Create report directory
-        run: mkdir -p ./reports/${{ github.run_id }}
-
-      - name: Run load tests and generate HTML report
-        run: pytest ${{ github.event.inputs.SCENARIO }} --html=./reports/${{ github.run_id }}/index.html
+      - name: Run tests and generate HTML report
+        run: |
+          mkdir -p reports/${{ github.run_id }}
+          pytest ${{ github.event.inputs.SCENARIO }} --html=reports/${{ github.run_id }}/index.html
 
       - name: Deploy HTML report to GitHub Pages
         if: always()
