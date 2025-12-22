@@ -1,8 +1,11 @@
 import pytest
-from ..base.base_test import BaseTest
-from ..generators.data_generator import UserDataGenerator
+# from ..base.base_test import BaseTest
+# from ..generators.data_generator import UserDataGenerator
 import time
 import allure
+
+from base.base_test import BaseTest
+from generators.data_generator import UserDataGenerator
 
 
 @allure.feature("Управление пользователями")

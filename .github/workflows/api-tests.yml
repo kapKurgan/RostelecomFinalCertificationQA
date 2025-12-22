@@ -10,7 +10,7 @@ on:
           - -m login
           - -m regression
         required: true
-        description: 'Framework API test config file'
+        description: 'Locust config file'
 
 jobs:
   run-tests:
@@ -29,12 +29,15 @@ jobs:
       - name: Clone test services
         run: git clone https://github.com/kapKurgan/framework-for-testing-functionality-user-management-API.git testing-API
 
+      - name: Check compose file exists
+        run: ls -la testing-API/docker-compose*
+
       - name: Build base Docker image
         run: docker build -f Dockerfile.base -t base-service .
         working-directory: testing-API
 
       - name: Start test services
-        run: docker compose up --build -d
+        run: docker compose -f docker-compose.ci.yaml up --build -d
         working-directory: testing-API
 
       - name: Install dependencies
@@ -59,5 +62,5 @@ jobs:
 
       - name: Stop test services
         if: always()
-        run: docker compose down -v
+        run: docker compose -f docker-compose.ci.yaml down -v
         working-directory: testing-API
