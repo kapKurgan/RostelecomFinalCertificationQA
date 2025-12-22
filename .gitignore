@@ -4,5 +4,5 @@ __pycache__
 .MyStep.txt
 allure-report
 allure-results
---init--.py
+__init__.py
 .idea
